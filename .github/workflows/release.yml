@@ -1,0 +1,43 @@
+name: Build
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build with MinGW-w64
+        shell: cmd
+        run: |
+          set PATH=C:\msys64\mingw64\bin;%PATH%
+          windres ReadingRuler.rc -O coff -o resource.o
+          g++ -O2 -Wall -municode -mwindows -static -s -o ReadingRuler.exe ReadingRuler.cpp resource.o -luser32 -lgdi32 -lshell32 -lole32
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ReadingRuler
+          path: ReadingRuler.exe
+
+      - name: Attach to release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ReadingRuler.exe
+          body: |
+            Download `ReadingRuler.exe` and double-click it. One file, no
+            installer, no runtime, nothing to keep alongside it.
+
+            Windows SmartScreen will warn that the publisher is unknown,
+            because the executable is unsigned. Click **More info**, then
+            **Run anyway**.
