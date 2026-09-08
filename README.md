@@ -41,6 +41,8 @@ unsigned. Click **More info** → **Run anyway**.
 | `Ctrl + Alt + L` | Lock the band in place |
 | `Ctrl + Alt + ]` / `[` | More / less dimming |
 
+![Reading Ruler Quick Guide](reading-ruler-cheatsheet.png)
+
 Narrowing the band turns it into a reading window that tracks the cursor
 horizontally as well as vertically.
 
